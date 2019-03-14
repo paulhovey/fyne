@@ -9,6 +9,8 @@ import (
 )
 
 type iconRenderer struct {
+	baseRenderer
+
 	objects []fyne.CanvasObject
 
 	image *Icon
@@ -53,8 +55,10 @@ func (i *iconRenderer) Refresh() {
 	canvas.Refresh(i.image)
 }
 
-func (i *iconRenderer) Destroy() {
+func (i *iconRenderer) Destroy(w fyne.CanvasObject) {
+	i.objects = nil
 	i.image = nil
+	i.destroyed(w)
 }
 
 // Icon widget is a basic image component that load's its resource to match the theme.
@@ -89,10 +93,6 @@ func (i *Icon) Show() {
 // Hide this widget, if it was previously visible
 func (i *Icon) Hide() {
 	i.hide(i)
-}
-
-func (i *Icon) Destroyed() {
-	i.destroyed(i)
 }
 
 // SetResource updates the resource rendered in this icon widget

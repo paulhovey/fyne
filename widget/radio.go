@@ -14,6 +14,8 @@ type radioRenderItem struct {
 }
 
 type radioRenderer struct {
+	baseRenderer
+
 	items []*radioRenderItem
 
 	objects []fyne.CanvasObject
@@ -106,13 +108,15 @@ func (r *radioRenderer) Objects() []fyne.CanvasObject {
 	return r.objects
 }
 
-func (r *radioRenderer) Destroy() {
+func (r *radioRenderer) Destroy(w fyne.CanvasObject) {
 	for _, item := range r.items {
 		item.icon = nil
 		item.label = nil
 	}
+	r.objects = nil
 	r.items = nil
 	r.radio = nil
+	r.destroyed(w)
 }
 
 // Radio widget has a list of text labels and radio check icons next to each.
@@ -150,10 +154,6 @@ func (r *Radio) Show() {
 // Hide this widget, if it was previously visible
 func (r *Radio) Hide() {
 	r.hide(r)
-}
-
-func (r *Radio) Destroyed() {
-	r.destroyed(r)
 }
 
 // Tapped is called when a pointer tapped event is captured and triggers any change handler
@@ -195,7 +195,7 @@ func (r *Radio) CreateRenderer() fyne.WidgetRenderer {
 		items = append(items, &radioRenderItem{icon, text})
 	}
 
-	return &radioRenderer{items, objects, r}
+	return &radioRenderer{baseRenderer{}, items, objects, r}
 }
 func (r *Radio) itemHeight() int {
 	return (r.MinSize().Height / len(r.Options))

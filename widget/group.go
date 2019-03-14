@@ -44,10 +44,6 @@ func (g *Group) Hide() {
 	g.hide(g)
 }
 
-func (g *Group) Destroyed() {
-	g.destroyed(g)
-}
-
 // Prepend inserts a new CanvasObject at the top of the group
 func (g *Group) Prepend(object fyne.CanvasObject) {
 	g.box.Prepend(object)
@@ -92,6 +88,8 @@ func NewGroupWithScroller(title string, children ...fyne.CanvasObject) *Group {
 }
 
 type groupRenderer struct {
+	baseRenderer
+
 	label         *Label
 	line, labelBg *canvas.Rectangle
 
@@ -144,9 +142,11 @@ func (g *groupRenderer) Refresh() {
 	canvas.Refresh(g.group)
 }
 
-func (g *groupRenderer) Destroy() {
+func (g *groupRenderer) Destroy(w fyne.CanvasObject) {
+	g.objects = nil
 	g.label = nil
 	g.line = nil
 	g.labelBg = nil
 	g.group = nil
+	g.destroyed(w)
 }

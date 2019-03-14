@@ -18,6 +18,8 @@ const (
 )
 
 type infProgressRenderer struct {
+	baseRenderer
+
 	objects   []fyne.CanvasObject
 	bar       *canvas.Rectangle
 	ticker    *time.Ticker
@@ -134,11 +136,13 @@ func (p *infProgressRenderer) infiniteProgressLoop() {
 	}
 }
 
-func (p *infProgressRenderer) Destroy() {
+func (p *infProgressRenderer) Destroy(w fyne.CanvasObject) {
 	p.stop()
+	p.objects = nil
 	p.bar = nil
 	p.tickMutex = nil
 	p.progress = nil
+	p.destroyed(w)
 }
 
 // ProgressBarInfinite widget creates a horizontal panel that indicates waiting indefinitely
@@ -176,11 +180,6 @@ func (p *ProgressBarInfinite) Hide() {
 	p.hide(p)
 }
 
-func (p *ProgressBarInfinite) Destroyed() {
-	p.Stop()
-	p.destroyed(p)
-}
-
 // Start the infinite progress bar background thread to update it continuously
 func (p *ProgressBarInfinite) Start() {
 	Renderer(p).(*infProgressRenderer).start()
@@ -199,7 +198,7 @@ func (p *ProgressBarInfinite) Running() bool {
 // CreateRenderer is a private method to Fyne which links this widget to it's renderer
 func (p *ProgressBarInfinite) CreateRenderer() fyne.WidgetRenderer {
 	bar := canvas.NewRectangle(theme.PrimaryColor())
-	render := &infProgressRenderer{[]fyne.CanvasObject{bar}, bar, nil, &sync.Mutex{}, p}
+	render := &infProgressRenderer{baseRenderer{}, []fyne.CanvasObject{bar}, bar, nil, &sync.Mutex{}, p}
 	render.start()
 	return render
 }

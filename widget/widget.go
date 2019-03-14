@@ -70,15 +70,15 @@ func (w *baseWidget) hide(parent fyne.Widget) {
 	canvas.Refresh(parent)
 }
 
-func (w *baseWidget) destroyed(parent fyne.Widget) {
-	for _, child := range Renderer(parent).Objects() {
-		child.Destroyed()
-	}
+// A base renderer class to define the standard renderer behaviours.
+type baseRenderer struct {
+}
+
+func (r *baseRenderer) destroyed(parent fyne.CanvasObject) {
 	// set renderer and widget to be garbage collected
-	Renderer(parent).Destroy()
 	renderers.Delete(parent)
 	parent = nil
-	w = nil
+	r = nil
 }
 
 var renderers sync.Map

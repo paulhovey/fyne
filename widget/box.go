@@ -46,10 +46,6 @@ func (b *Box) Hide() {
 	b.hide(b)
 }
 
-func (b *Box) Destroyed() {
-	b.destroyed(b)
-}
-
 // ApplyTheme updates this box to match the current theme
 func (b *Box) ApplyTheme() {
 	b.background = theme.BackgroundColor()
@@ -102,6 +98,8 @@ func NewVBox(children ...fyne.CanvasObject) *Box {
 }
 
 type boxRenderer struct {
+	baseRenderer
+
 	layout fyne.Layout
 
 	objects []fyne.CanvasObject
@@ -138,6 +136,8 @@ func (b *boxRenderer) Refresh() {
 	canvas.Refresh(b.box)
 }
 
-func (b *boxRenderer) Destroy() {
+func (b *boxRenderer) Destroy(w fyne.CanvasObject) {
+	b.objects = nil
 	b.box = nil
+	b.destroyed(w)
 }

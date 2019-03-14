@@ -330,7 +330,7 @@ func (w *window) closed(viewport *glfw.Window) {
 	viewport.SetShouldClose(true)
 
 	// destroy all elements inside the window
-	w.canvas.content.Destroyed()
+	widget.Renderer(w.canvas.content).Destroy(w.canvas.content)
 
 	// trigger callbacks
 	if w.onClosed != nil {

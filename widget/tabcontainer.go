@@ -56,10 +56,6 @@ func (t *TabContainer) Hide() {
 	t.hide(t)
 }
 
-func (t *TabContainer) Destroyed() {
-	t.destroyed(t)
-}
-
 // SelectTab sets the specified TabItem to be selected and it's content visible.
 func (t *TabContainer) SelectTab(item *TabItem) {
 	for i, child := range t.Items {
@@ -145,6 +141,8 @@ func NewTabContainer(items ...*TabItem) *TabContainer {
 }
 
 type tabContainerRenderer struct {
+	baseRenderer
+
 	tabBar *Box
 	line   *canvas.Rectangle
 
@@ -211,8 +209,10 @@ func (t *tabContainerRenderer) Refresh() {
 	}
 }
 
-func (t *tabContainerRenderer) Destroy() {
+func (t *tabContainerRenderer) Destroy(w fyne.CanvasObject) {
+	t.objects = nil
 	t.tabBar = nil
 	t.line = nil
 	t.container = nil
+	t.destroyed(w)
 }

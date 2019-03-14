@@ -94,7 +94,3 @@ func (l *Label) Show() {
 func (l *Label) Hide() {
 	l.hide(l)
 }
-
-func (l *Label) Destroyed() {
-	l.destroyed(l)
-}

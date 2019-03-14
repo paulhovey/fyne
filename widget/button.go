@@ -9,6 +9,8 @@ import (
 )
 
 type buttonRenderer struct {
+	baseRenderer
+
 	icon  *canvas.Image
 	label *canvas.Text
 
@@ -97,10 +99,9 @@ func (b *buttonRenderer) Objects() []fyne.CanvasObject {
 	return b.objects
 }
 
-func (b *buttonRenderer) Destroy() {
-	b.icon = nil
-	b.label = nil
-	b.button = nil
+func (b *buttonRenderer) Destroy(w fyne.CanvasObject) {
+	b.objects = nil
+	b.destroyed(w)
 }
 
 // Button widget has a text label and triggers an event func when clicked
@@ -150,10 +151,6 @@ func (b *Button) Hide() {
 	b.hide(b)
 }
 
-func (b *Button) Destroyed() {
-	b.destroyed(b)
-}
-
 // Tapped is called when a pointer tapped event is captured and triggers any tap handler
 func (b *Button) Tapped(*fyne.PointEvent) {
 	if b.OnTapped != nil {
@@ -182,7 +179,7 @@ func (b *Button) CreateRenderer() fyne.WidgetRenderer {
 		objects = append(objects, icon)
 	}
 
-	return &buttonRenderer{icon, text, objects, b}
+	return &buttonRenderer{baseRenderer{}, icon, text, objects, b}
 }
 
 // SetText allows the button label to be changed

@@ -73,10 +73,6 @@ func (t *textProvider) Hide() {
 	t.hide(t)
 }
 
-func (t *textProvider) Destroyed() {
-	t.destroyed(t)
-}
-
 // CreateRenderer is a private method to Fyne which links this widget to it's renderer
 func (t *textProvider) CreateRenderer() fyne.WidgetRenderer {
 	if t.presenter == nil {
@@ -193,6 +189,8 @@ func (t *textProvider) charMinSize() fyne.Size {
 
 // Renderer
 type textRenderer struct {
+	baseRenderer
+
 	objects []fyne.CanvasObject
 
 	texts []*canvas.Text
@@ -276,9 +274,11 @@ func (r *textRenderer) BackgroundColor() color.Color {
 	return color.Transparent
 }
 
-func (r *textRenderer) Destroy() {
+func (r *textRenderer) Destroy(w fyne.CanvasObject) {
+	r.objects = nil
 	r.texts = nil
 	r.provider = nil
+	r.destroyed(w)
 }
 
 // lineSize returns the rendered size for the line specified by col and row

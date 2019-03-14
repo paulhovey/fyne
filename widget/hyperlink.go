@@ -124,7 +124,3 @@ func (hl *Hyperlink) Show() {
 func (hl *Hyperlink) Hide() {
 	hl.hide(hl)
 }
-
-func (hl *Hyperlink) Destroyed() {
-	hl.destroyed(hl)
-}

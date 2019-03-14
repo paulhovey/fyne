@@ -9,6 +9,8 @@ import (
 )
 
 type checkRenderer struct {
+	baseRenderer
+
 	icon  *canvas.Image
 	label *canvas.Text
 
@@ -65,10 +67,12 @@ func (c *checkRenderer) Objects() []fyne.CanvasObject {
 	return c.objects
 }
 
-func (c *checkRenderer) Destroy() {
+func (c *checkRenderer) Destroy(w fyne.CanvasObject) {
+	c.objects = nil
 	c.icon = nil
 	c.label = nil
 	c.check = nil
+	c.destroyed(w)
 }
 
 // Check widget has a text label and a checked (or unchecked) icon and triggers an event func when toggled
@@ -122,10 +126,6 @@ func (c *Check) Hide() {
 	c.hide(c)
 }
 
-func (c *Check) Destroyed() {
-	c.destroyed(c)
-}
-
 // Tapped is called when a pointer tapped event is captured and triggers any change handler
 func (c *Check) Tapped(*fyne.PointEvent) {
 	c.SetChecked(!c.Checked)
@@ -142,7 +142,7 @@ func (c *Check) CreateRenderer() fyne.WidgetRenderer {
 	text := canvas.NewText(c.Text, theme.TextColor())
 	text.Alignment = fyne.TextAlignCenter
 
-	return &checkRenderer{icon, text, []fyne.CanvasObject{icon, text}, c}
+	return &checkRenderer{baseRenderer{}, icon, text, []fyne.CanvasObject{icon, text}, c}
 }
 
 // NewCheck creates a new check widget with the set label and change handler

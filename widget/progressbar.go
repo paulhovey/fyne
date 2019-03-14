@@ -12,6 +12,8 @@ import (
 const defaultText = "%d%%"
 
 type progressRenderer struct {
+	baseRenderer
+
 	objects []fyne.CanvasObject
 
 	bar   *canvas.Rectangle
@@ -73,10 +75,12 @@ func (p *progressRenderer) Objects() []fyne.CanvasObject {
 	return p.objects
 }
 
-func (p *progressRenderer) Destroy() {
+func (p *progressRenderer) Destroy(w fyne.CanvasObject) {
+	p.objects = nil
 	p.bar = nil
 	p.label = nil
 	p.progress = nil
+	p.destroyed(w)
 }
 
 // ProgressBar widget creates a horizontal panel that indicates progress
@@ -113,11 +117,6 @@ func (p *ProgressBar) Hide() {
 	p.hide(p)
 }
 
-func (p *ProgressBar) Destroyed() {
-	p.hide(p)
-	p.destroyed(p)
-}
-
 // SetValue changes the current value of this progress bar (from p.Min to p.Max).
 // The widget will be refreshed to indicate the change.
 func (p *ProgressBar) SetValue(v float64) {
@@ -134,7 +133,7 @@ func (p *ProgressBar) CreateRenderer() fyne.WidgetRenderer {
 	bar := canvas.NewRectangle(theme.PrimaryColor())
 	label := canvas.NewText("0%", theme.TextColor())
 	label.Alignment = fyne.TextAlignCenter
-	return &progressRenderer{[]fyne.CanvasObject{bar, label}, bar, label, p}
+	return &progressRenderer{baseRenderer{}, []fyne.CanvasObject{bar, label}, bar, label, p}
 }
 
 // NewProgressBar creates a new progress bar widget.

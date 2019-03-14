@@ -23,5 +23,5 @@ type WidgetRenderer interface {
 	BackgroundColor() color.Color
 	Objects() []CanvasObject
 
-	Destroy()
+	Destroy(CanvasObject) // base widget using renderer passed in
 }

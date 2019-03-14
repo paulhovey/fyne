@@ -9,6 +9,8 @@ import (
 )
 
 type scrollRenderer struct {
+	baseRenderer
+
 	scroll  *ScrollContainer
 	vertBar *canvas.Rectangle
 
@@ -79,9 +81,11 @@ func (s *scrollRenderer) Objects() []fyne.CanvasObject {
 	return s.objects
 }
 
-func (s *scrollRenderer) Destroy() {
+func (s *scrollRenderer) Destroy(w fyne.CanvasObject) {
+	s.objects = nil
 	s.vertBar = nil
 	s.scroll = nil
+	s.destroyed(w)
 }
 
 // ScrollContainer defines a container that is smaller than the Content.
@@ -137,14 +141,10 @@ func (s *ScrollContainer) Hide() {
 	s.hide(s)
 }
 
-func (s *ScrollContainer) Destroyed() {
-	s.destroyed(s)
-}
-
 // CreateRenderer is a private method to Fyne which links this widget to it's renderer
 func (s *ScrollContainer) CreateRenderer() fyne.WidgetRenderer {
 	bar := canvas.NewRectangle(theme.ScrollBarColor())
-	return &scrollRenderer{scroll: s, vertBar: bar, objects: []fyne.CanvasObject{s.Content, bar}}
+	return &scrollRenderer{baseRenderer: baseRenderer{}, scroll: s, vertBar: bar, objects: []fyne.CanvasObject{s.Content, bar}}
 }
 
 // NewScrollContainer creates a scrollable parent wrapping the specified content.

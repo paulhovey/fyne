@@ -14,6 +14,8 @@ const (
 )
 
 type entryRenderer struct {
+	baseRenderer
+
 	text         *textProvider
 	placeholder  *textProvider
 	line, cursor *canvas.Rectangle
@@ -106,12 +108,14 @@ func (e *entryRenderer) Objects() []fyne.CanvasObject {
 	return e.objects
 }
 
-func (e *entryRenderer) Destroy() {
+func (e *entryRenderer) Destroy(w fyne.CanvasObject) {
+	e.objects = nil
 	e.text = nil
 	e.placeholder = nil
 	e.line = nil
 	e.cursor = nil
 	e.entry = nil
+	e.destroyed(w)
 }
 
 // Entry widget allows simple text to be input when focused.
@@ -161,10 +165,6 @@ func (e *Entry) Hide() {
 		fyne.CurrentApp().Driver().CanvasForObject(e).Focus(nil)
 	}
 	e.hide(e)
-}
-
-func (e *Entry) Destroyed() {
-	e.destroyed(e)
 }
 
 // SetText manually sets the text of the Entry to the given text value.
@@ -422,7 +422,7 @@ func (e *Entry) CreateRenderer() fyne.WidgetRenderer {
 	line := canvas.NewRectangle(theme.ButtonColor())
 	cursor := canvas.NewRectangle(theme.BackgroundColor())
 
-	return &entryRenderer{text, placeholder, line, cursor,
+	return &entryRenderer{baseRenderer{}, text, placeholder, line, cursor,
 		[]fyne.CanvasObject{line, placeholder, text, cursor}, e}
 }
 
