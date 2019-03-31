@@ -87,11 +87,14 @@ func (p *infProgressRenderer) BackgroundColor() color.Color {
 // Refresh updates the size and position of the horizontal scrolling infinite progress bar
 func (p *infProgressRenderer) Refresh() {
 	p.updateBar()
-	// c := fyne.CurrentApp().Driver().CanvasForObject(p.progress)
-	// if c != nil {
-	// 	c.DrawObject(p.bar, p.bar.Position(), c.Size())
-	// }
-	canvas.Refresh(p.progress)
+	c := fyne.CurrentApp().Driver().CanvasForObject(p.progress)
+	if c != nil {
+		fyne.CurrentApp().Driver().RunOnMainAsync(func() {
+			c.DrawObject(p.bar, p.bar.Position(), c.Size())
+		})
+	} else {
+		// canvas.Refresh(p.progress)
+	}
 }
 
 func (p *infProgressRenderer) Objects() []fyne.CanvasObject {

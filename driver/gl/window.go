@@ -59,7 +59,7 @@ func (w *window) Title() string {
 
 func (w *window) SetTitle(title string) {
 	w.title = title
-	runOnMainAsync(func() {
+	fyne.CurrentApp().Driver().RunOnMainAsync(func() {
 		w.viewport.SetTitle(title)
 	})
 }
@@ -73,7 +73,7 @@ func (w *window) SetFullScreen(full bool) {
 	if !w.visible {
 		return
 	}
-	runOnMainAsync(func() {
+	fyne.CurrentApp().Driver().RunOnMainAsync(func() {
 		monitor := w.getMonitorForWindow()
 		mode := monitor.GetVideoMode()
 
@@ -91,7 +91,7 @@ func (w *window) SetFullScreen(full bool) {
 func (w *window) CenterOnScreen() {
 	viewWidth, viewHeight := w.minSizeOnScreen()
 
-	runOnMainAsync(func() {
+	fyne.CurrentApp().Driver().RunOnMainAsync(func() {
 		// get window dimensions in pixels
 		monitor := w.getMonitorForWindow()
 		monMode := monitor.GetVideoMode()
@@ -126,7 +126,7 @@ func (w *window) minSizeOnScreen() (int, int) {
 }
 
 func (w *window) RequestFocus() {
-	runOnMainAsync(func() {
+	fyne.CurrentApp().Driver().RunOnMainAsync(func() {
 		err := w.viewport.Focus()
 		if err != nil {
 			fyne.LogError("Error requesting focus", err)
@@ -135,7 +135,7 @@ func (w *window) RequestFocus() {
 }
 
 func (w *window) Resize(size fyne.Size) {
-	runOnMainAsync(func() {
+	fyne.CurrentApp().Driver().RunOnMainAsync(func() {
 		scale := w.canvas.Scale()
 		w.viewport.SetSize(int(float32(size.Width)*scale), int(float32(size.Height)*scale))
 	})
@@ -147,7 +147,7 @@ func (w *window) FixedSize() bool {
 
 func (w *window) SetFixedSize(fixed bool) {
 	w.fixedSize = fixed
-	runOnMainAsync(w.fitContent)
+	fyne.CurrentApp().Driver().RunOnMainAsync(w.fitContent)
 }
 
 func (w *window) Padded() bool {
@@ -166,7 +166,7 @@ func (w *window) SetPadded(padded bool) {
 		w.canvas.content.Move(fyne.NewPos(0, 0))
 	}
 
-	runOnMainAsync(w.fitContent)
+	fyne.CurrentApp().Driver().RunOnMainAsync(w.fitContent)
 }
 
 func (w *window) Icon() fyne.Resource {
@@ -277,7 +277,7 @@ func (w *window) detectScale() float32 {
 }
 
 func (w *window) Show() {
-	runOnMainAsync(func() {
+	fyne.CurrentApp().Driver().RunOnMainAsync(func() {
 		w.visible = true
 		w.viewport.Show()
 
@@ -288,7 +288,7 @@ func (w *window) Show() {
 }
 
 func (w *window) Hide() {
-	runOnMainAsync(func() {
+	fyne.CurrentApp().Driver().RunOnMainAsync(func() {
 		w.viewport.Hide()
 		w.visible = false
 	})
@@ -333,7 +333,7 @@ func (w *window) SetContent(content fyne.CanvasObject) {
 		pad := theme.Padding() * 2
 		min = fyne.NewSize(min.Width+pad, min.Height+pad)
 	}
-	runOnMain(func() {
+	fyne.CurrentApp().Driver().RunOnMain(func() {
 		w.fitContent()
 		w.resize(min)
 	})
@@ -391,7 +391,7 @@ func (w *window) moved(viewport *glfw.Window, x, y int) {
 		// attempt the resizing until it works... (Gnome and others don't support resize whist moving)
 		for ww, wh := viewport.GetSize(); ww != newWidth || wh != newHeight; {
 			time.Sleep(time.Second / 10)
-			runOnMain(func() {
+			fyne.CurrentApp().Driver().RunOnMain(func() {
 				w.viewport.SetSize(newWidth, newHeight)
 				ww, wh = viewport.GetSize()
 			})
@@ -469,7 +469,7 @@ func (w *window) mouseMoved(viewport *glfw.Window, xpos float64, ypos float64) {
 	case *widget.Hyperlink:
 		cursor = hyperlinkCursor
 	}
-	runOnMainAsync(func() {
+	fyne.CurrentApp().Driver().RunOnMainAsync(func() {
 		viewport.SetCursor(cursor)
 	})
 }
@@ -812,7 +812,7 @@ func (w *window) charModInput(viewport *glfw.Window, char rune, mods glfw.Modifi
 
 func (d *gLDriver) CreateWindow(title string) fyne.Window {
 	var ret *window
-	runOnMain(func() {
+	fyne.CurrentApp().Driver().RunOnMain(func() {
 		master := len(d.windows) == 0
 		if master {
 			err := glfw.Init()

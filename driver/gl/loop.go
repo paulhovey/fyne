@@ -32,7 +32,7 @@ func running() bool {
 }
 
 // force a function f to run on the main thread
-func runOnMain(f func()) {
+func (d *gLDriver) RunOnMain(f func()) {
 	// If we are on main just execute - otherwise add it to the main queue and wait.
 	// The "running" variable is normally false when we are on the main thread.
 	if !running() {
@@ -45,7 +45,7 @@ func runOnMain(f func()) {
 	}
 }
 
-func runOnMainAsync(f func()) {
+func (d *gLDriver) RunOnMainAsync(f func()) {
 	go func() {
 		funcQueue <- funcData{f: f, done: nil}
 	}()

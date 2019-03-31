@@ -15,6 +15,9 @@ type Driver interface {
 	// Get the canvas that is associated with a given CanvasObject.
 	CanvasForObject(CanvasObject) Canvas
 
+	RunOnMain(f func())
+	RunOnMainAsync(f func())
+
 	// Start the main event loop of the driver.
 	Run()
 	// Close the driver and open windows then exit the application.
