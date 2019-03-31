@@ -14,6 +14,8 @@ type CanvasObject interface {
 	Position() Position
 	Move(Position)
 	MinSize() Size
+	SetCanvas(Canvas)
+	Canvas() Canvas
 
 	// visibility
 	Visible() bool

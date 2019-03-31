@@ -11,19 +11,12 @@ import (
 )
 
 var canvasMutex sync.RWMutex
-var canvases = make(map[fyne.CanvasObject]fyne.Canvas)
 
 const textDPI = 78
 
 type gLDriver struct {
 	windows []fyne.Window
 	done    chan interface{}
-}
-
-func (d *gLDriver) CanvasForObject(obj fyne.CanvasObject) fyne.Canvas {
-	canvasMutex.RLock()
-	defer canvasMutex.RUnlock()
-	return canvases[obj]
 }
 
 func loadFont(data fyne.Resource) *truetype.Font {

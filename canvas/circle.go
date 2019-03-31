@@ -15,6 +15,7 @@ type Circle struct {
 	FillColor   color.Color // The circle fill colour
 	StrokeColor color.Color // The circle stroke colour
 	StrokeWidth float32     // The stroke width of the circle
+	canvas      fyne.Canvas
 }
 
 // Size returns the current size of bounding box for this circle object
@@ -62,6 +63,14 @@ func (l *Circle) Hide() {
 	l.Hidden = true
 
 	Refresh(l)
+}
+
+func (l *Circle) SetCanvas(c fyne.Canvas) {
+	l.canvas = c
+}
+
+func (l *Circle) Canvas() fyne.Canvas {
+	return l.canvas
 }
 
 // NewCircle returns a new Circle instance

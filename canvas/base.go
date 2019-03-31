@@ -6,7 +6,8 @@ import "fyne.io/fyne"
 type baseObject struct {
 	size     fyne.Size     // The current size of the Rectangle
 	position fyne.Position // The current position of the Rectangle
-	Hidden   bool          // Is this object currently hidden
+	canvas   fyne.Canvas
+	Hidden   bool // Is this object currently hidden
 
 	min fyne.Size // The minimum size this object can be
 }
@@ -60,9 +61,18 @@ func (r *baseObject) Hide() {
 	r.Hidden = true
 }
 
+func (r *baseObject) SetCanvas(c fyne.Canvas) {
+	r.canvas = c
+}
+
+func (r *baseObject) Canvas() fyne.Canvas {
+	return r.canvas
+}
+
 // Refresh instructs the containing canvas to refresh the specified obj.
 func Refresh(obj fyne.CanvasObject) {
-	c := fyne.CurrentApp().Driver().CanvasForObject(obj)
+	// c := fyne.CurrentApp().Driver().CanvasForObject(obj)
+	c := obj.Canvas()
 	if c != nil {
 		c.Refresh(obj)
 	}

@@ -12,6 +12,7 @@ import (
 type baseWidget struct {
 	size     fyne.Size
 	position fyne.Position
+	canvas   fyne.Canvas
 	Hidden   bool
 }
 
@@ -68,6 +69,14 @@ func (w *baseWidget) hide(parent fyne.Widget) {
 	}
 
 	canvas.Refresh(parent)
+}
+
+func (w *baseWidget) SetCanvas(c fyne.Canvas) {
+	w.canvas = c
+}
+
+func (w *baseWidget) Canvas() fyne.Canvas {
+	return w.canvas
 }
 
 var renderers sync.Map

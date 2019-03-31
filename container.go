@@ -5,7 +5,8 @@ package fyne
 type Container struct {
 	size     Size     // The current size of the Container
 	position Position // The current position of the Container
-	Hidden   bool     // Is this Container hidden
+	canvas   Canvas
+	Hidden   bool // Is this Container hidden
 
 	Layout  Layout         // The Layout algorithm for arranging child CanvasObjects
 	Objects []CanvasObject // The set of CanvasObjects this container holds
@@ -79,6 +80,14 @@ func (c *Container) Hide() {
 	for _, child := range c.Objects {
 		child.Hide()
 	}
+}
+
+func (c *Container) SetCanvas(fc Canvas) {
+	c.canvas = fc
+}
+
+func (c *Container) Canvas() Canvas {
+	return c.canvas
 }
 
 // AddObject adds another CanvasObject to the set this Container holds.

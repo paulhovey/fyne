@@ -255,9 +255,7 @@ func (c *glCanvas) drawText(text *canvas.Text, pos fyne.Position, frame fyne.Siz
 }
 
 func (c *glCanvas) drawObject(o fyne.CanvasObject, offset fyne.Position, frame fyne.Size) {
-	canvasMutex.Lock()
-	canvases[o] = c
-	canvasMutex.Unlock()
+	o.SetCanvas(c)
 	pos := o.Position().Add(offset)
 	switch obj := o.(type) {
 	case *canvas.Circle:

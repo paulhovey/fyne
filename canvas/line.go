@@ -17,6 +17,7 @@ type Line struct {
 
 	StrokeColor color.Color // The line stroke colour
 	StrokeWidth float32     // The stroke width of the line
+	canvas      fyne.Canvas
 }
 
 // Size returns the current size of bounding box for this line object
@@ -65,6 +66,14 @@ func (l *Line) Hide() {
 	l.Hidden = true
 
 	Refresh(l)
+}
+
+func (l *Line) SetCanvas(c fyne.Canvas) {
+	l.canvas = c
+}
+
+func (l *Line) Canvas() fyne.Canvas {
+	return l.canvas
 }
 
 // NewLine returns a new Line instance

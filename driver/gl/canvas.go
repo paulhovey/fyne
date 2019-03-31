@@ -78,6 +78,7 @@ func (c *glCanvas) SetContent(content fyne.CanvasObject) {
 
 	c.content.Resize(fyne.NewSize(width, height))
 	c.content.Move(fyne.NewPos(pad, pad))
+	content.SetCanvas(c)
 	c.setDirty(true)
 }
 

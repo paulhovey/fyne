@@ -12,9 +12,6 @@ type Driver interface {
 	// font size and style.
 	RenderedTextSize(string, int, TextStyle) Size
 
-	// Get the canvas that is associated with a given CanvasObject.
-	CanvasForObject(CanvasObject) Canvas
-
 	// Start the main event loop of the driver.
 	Run()
 	// Close the driver and open windows then exit the application.

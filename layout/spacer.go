@@ -16,6 +16,7 @@ type Spacer struct {
 
 	size   fyne.Size
 	pos    fyne.Position
+	canvas fyne.Canvas
 	hidden bool
 }
 
@@ -67,6 +68,14 @@ func (s *Spacer) Show() {
 // Hide removes this Spacer from layout calculations
 func (s *Spacer) Hide() {
 	s.hidden = true
+}
+
+func (s *Spacer) SetCanvas(c fyne.Canvas) {
+	s.canvas = c
+}
+
+func (s *Spacer) Canvas() fyne.Canvas {
+	return s.canvas
 }
 
 // NewSpacer returns a spacer object which can fill vertical and horizontal
