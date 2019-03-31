@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"fyne.io/fyne"
 	"fyne.io/fyne/canvas"
@@ -25,7 +26,7 @@ import (
 	"golang.org/x/image/math/fixed"
 )
 
-var textures = make(map[fyne.CanvasObject]uint32)
+var textures = &sync.Map{}
 
 const vectorPad = 10
 
@@ -33,11 +34,15 @@ func getTexture(object fyne.CanvasObject, creator func(canvasObject fyne.CanvasO
 	if _, skipCache := object.(*canvas.Raster); skipCache {
 		return creator(object)
 	}
-	texture := textures[object]
+	tObj, ok := textures.Load(object)
+	var texture uint32 = 0
 
-	if texture == 0 {
+	if ok {
+		texture = tObj.(uint32)
+	}
+	if !ok || texture == 0 {
 		texture = creator(object)
-		textures[object] = texture
+		textures.Store(object, texture)
 	}
 	return texture
 }

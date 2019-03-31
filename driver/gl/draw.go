@@ -254,7 +254,7 @@ func (c *glCanvas) drawText(text *canvas.Text, pos fyne.Position, frame fyne.Siz
 	c.drawTexture(texture, points)
 }
 
-func (c *glCanvas) drawObject(o fyne.CanvasObject, offset fyne.Position, frame fyne.Size) {
+func (c *glCanvas) DrawObject(o fyne.CanvasObject, offset fyne.Position, frame fyne.Size) {
 	canvasMutex.Lock()
 	canvases[o] = c
 	canvasMutex.Unlock()

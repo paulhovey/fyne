@@ -18,5 +18,6 @@ type Canvas interface {
 	SetOnTypedRune(func(rune))
 	OnTypedKey() func(*KeyEvent)
 	SetOnTypedKey(func(*KeyEvent))
+	DrawObject(o CanvasObject, offset Position, frame Size)
 	AddShortcut(shortcut Shortcut, handler func(shortcut Shortcut))
 }

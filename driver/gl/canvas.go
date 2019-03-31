@@ -179,7 +179,7 @@ func (c *glCanvas) paint(size fyne.Size) {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
 	paintObj := func(obj fyne.CanvasObject, pos fyne.Position) {
-		c.drawObject(obj, pos, size)
+		c.DrawObject(obj, pos, size)
 	}
 	c.walkObjects(c.content, fyne.NewPos(0, 0), paintObj)
 }

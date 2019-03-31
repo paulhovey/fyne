@@ -115,10 +115,13 @@ func (d *gLDriver) freeDirtyTextures(canvas *glCanvas) {
 		select {
 		case object := <-canvas.refreshQueue:
 			freeWalked := func(obj fyne.CanvasObject, _ fyne.Position) {
-				texture := textures[obj]
-				if texture != 0 {
-					gl.DeleteTextures(1, &texture)
-					delete(textures, obj)
+				tObj, ok := textures.Load(object)
+				if ok {
+					var texture uint32 = tObj.(uint32)
+					if texture > 0 {
+						gl.DeleteTextures(1, &texture)
+						textures.Delete(obj)
+					}
 				}
 			}
 			canvas.walkObjects(object, fyne.NewPos(0, 0), freeWalked)
